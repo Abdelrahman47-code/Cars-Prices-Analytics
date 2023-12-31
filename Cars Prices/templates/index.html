@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+    <style>
+        body {
+            background-image: url('/static/car.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 1000px;
+            text-align: left;
+            padding: 10px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: inline-block;
+            margin: 10px;
+            font-size: 16px;
+            width: 150px;
+        }
+
+        input,
+        select {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        select {
+            width: 50%;
+            margin: 0 20px;
+        }
+
+        .dropdown-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #13a96b;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #108c5d;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 18px;
+            color: #ccc;
+        }
+    </style>
+
+    <script>
+        function predictPrice() {
+            // Get the input values from the sliders and dropdowns
+            var length = document.getElementById('length').value;
+            var width = document.getElementById('width').value;
+            var height = document.getElementById('height').value;
+            var wheel_base = document.getElementById('wheel_base').value;
+            var seats = document.getElementById('seats').value;
+            var cargo_volume = document.getElementById('cargo_volume').value;
+            var max_torque = document.getElementById('max_torque').value;
+            var transmission = document.getElementById('transmission').value;
+            var fuel = document.getElementById('fuel').value;
+            var gear_box = document.getElementById('gear_box').value;
+
+            // Create data object to send to server
+            var data = {
+                'length': length,
+                'width': width,
+                'height': height,
+                'wheel_base': wheel_base,
+                'seats': seats,
+                'cargo_volume': cargo_volume,
+                'max_torque': max_torque,
+                'transmission': transmission,
+                'fuel': fuel,
+                'gear_box': gear_box
+            };
+
+            // Send AJAX request to the Flask server
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the result div with the predicted price
+                    document.getElementById('result').innerHTML = 'Predicted Price: ' + data.predicted_price.toFixed(3);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Car Price Prediction</h1>
+        <div class="row">
+            <div class="left-column">
+                <label for="length" title="Car Length">Length:</label>
+                <input type="range" id="length" name="length" min="3000" max="5000" value="4000">
+                <output for="length">4000</output>
+
+                <label for="width" title="Car Width">Width:</label>
+                <input type="range" id="width" name="width" min="1200" max="2000" value="1600">
+                <output for="width">1600</output>
+
+                <label for="height" title="Car Height">Height:</label>
+                <input type="range" id="height" name="height" min="1200" max="2000" value="1600">
+                <output for="height">1600</output>
+
+                <label for="wheel_base" title="Wheel Base">Wheel Base:</label>
+                <input type="range" id="wheel_base" name="wheel_base" min="2000" max="4000" value="3000">
+                <output for="wheel_base">3000</output>
+
+                <label for="seats" title="Seats">Seats:</label>
+                <input type="range" id="seats" name="seats" min="2" max="10" value="5">
+                <output for="seats">5</output>
+
+                <label for="cargo_volume" title="Cargo Volume">Cargo Volume:</label>
+                <input type="range" id="cargo_volume" name="cargo_volume" min="0" max="500" value="250">
+                <output for="cargo_volume">250</output>
+
+                <label for="max_torque" title="Max Torque At">Max Torque At:</label>
+                <input type="range" id="max_torque" name="max_torque" min="1000" max="4000" value="2000">
+                <output for="max_torque">2000</output>
+            </div>
+
+            <div class="right-column">
+                <div class="dropdown-container">
+                    <label for="transmission" title="Transmission">Transmission:</label>
+                    <select id="transmission" name="transmission">
+                        <option value="0">Automatic</option>
+                        <option value="1">Manual</option>
+                    </select>
+
+                    <label for="fuel" title="Fuel">Fuel:</label>
+                    <select id="fuel" name="fuel">
+                        <option value="0">CNG</option>
+                        <option value="1">Diesel</option>
+                        <option value="2">Electric</option>
+                        <option value="3">LPG</option>
+                        <option value="4">Petrol</option>
+                    </select>
+
+                    <label for="gear_box" title="Gear Box">Gear Box:</label>
+                    <select id="gear_box" name="gear_box">
+                        <option value="0">1 speed</option>
+                        <option value="1">4 speed</option>
+                        <option value="2">5 speed</option>
+                        <option value="3">6 speed</option>
+                        <option value="4">7 speed</option>
+                        <option value="5">8 speed</option>
+                        <option value="6">9 speed</option>
+                        <option value="7">CVT</option>
+                        <option value="8">DSG</option>
+                        <option value="9">Fully Automatic</option>
+                    </select>
+                </div>
+
+                <div class="button-container">
+                    <button type="button" onclick="predictPrice()">Predict</button>
+                </div>
+
+                <div class="result" id="result">
+                    {% if prediction_result is defined %}
+                        Predicted Price: {{ "{:.3f}".format(prediction_result) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="watermark">Made by: Abdelrahman Eldaba</div>
+    </div>
+</body>
+
+</html>
