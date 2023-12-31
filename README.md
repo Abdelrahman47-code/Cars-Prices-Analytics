@@ -33,5 +33,5 @@ Tools: Jupyter Notebook, Kaggle, Flask
 
 ### Your feedback and contributions are welcomed. Let's continue exploring the world of data science together!
 ### Connect with me on:
-- !['LinkedIn'](https://www.linkedin.com/in/abdelrahman-eldaba-739805192/)
-- !['Kaggle'](https://www.kaggle.com/abdelrahmanahmed110)
+-![LinkedIn](https://www.linkedin.com/in/abdelrahman-eldaba-739805192/)
+-![Kaggle'](https://www.kaggle.com/abdelrahmanahmed110)
